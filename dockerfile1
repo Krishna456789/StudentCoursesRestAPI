@@ -1,0 +1,26 @@
+pipeline {
+    agent { label 'docker' }
+    triggers { 
+        pollSCM('* * * * *')
+    }
+    stages {
+        stage('vcs') {
+            steps {
+                git url: 'https://github.com/Krishna456789/StudentCoursesRestAPI.git',
+                    branch: 'master'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'docker image build -t chaitanya456/spc:latest .'
+            }
+        }
+        stage('scan and push') {
+            steps {
+                sh 'echo docker scan chaitanya456/spc:latest'
+                sh 'docker image push chaitanya456/spc:latest'
+            }
+        }
+    }
+
+}
